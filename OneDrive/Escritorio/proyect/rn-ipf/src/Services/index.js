@@ -1,0 +1,1 @@
+export default SERVER = 'http://localhost:4000'
