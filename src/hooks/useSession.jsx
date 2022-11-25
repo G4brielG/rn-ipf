@@ -21,7 +21,7 @@ const useSession = () => {
 
   useEffect(() => {
     getItem();
-  }, []);
+  }, [])
 
   return { token, login, logout };
 };

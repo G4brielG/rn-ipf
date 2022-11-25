@@ -8,7 +8,25 @@ const container = {
   borderWidth: 1,
   //flex: 1,
   height: '100%',
-  backgroundColor: '#75ffaa'
+  backgroundColor: '#75ffaa',
+  
+}
+
+const fondo = {
+  backgroundColor: '#75ffaa',
+  height: '100%',
+}
+
+const mensaje = {
+  textAlign: 'center',
+  marginTop: '70%'
+}
+
+const cardd = {
+  borderWidth: 1,
+  with: '100%',
+  backgroundColor: 'white',
+  marginBottom: 10,
 }
 
 const input = {
@@ -19,15 +37,15 @@ const input = {
   marginBottom: 20,
 }
 const alertaF = {
-  width: 200,
-  backgroundColor: "rgba(255, 255, 255, 0.5)",
+  width: 300,
+  backgroundColor: "red",
   padding: 10,
-  color: "rgba(203, 0, 0, 1)",
+  color: "white",
+  textAlign: 'center'
 }
 const text = {
   height: 50,
   padding: 10,
-  // flex: 1
 };
 
 const capaText = {
@@ -142,4 +160,7 @@ export {
   alertaF,
   titless,
   capaText,
+  cardd,
+  fondo,
+  mensaje
 }
