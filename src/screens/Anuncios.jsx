@@ -1,37 +1,49 @@
 import { useState, useEffect } from "react";
 import { Text, View } from "react-native";
-import { NativeBaseProvider, Box, Stack, Heading } from "native-base";
+import { NativeBaseProvider, Box, Stack } from "native-base";
 import { fondo, cardd, mensaje } from "../styles/styles";
 
-export function Anuncios({ navigation }) {
-  const [data, setData] = useState([])
+export function Anuncios() {
+  const [ data, setData ] = useState([])
+
+  const handleFind = async () => {
+    const url = `${SERVER}/anuncios`;
+    const content = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    const response = await fetch(url, content);
+    const json = await response.json();
+
+    response.ok && setData(json)
+  };
+
+  useEffect(() => {
+    handleFind()
+  }, [])
   return (
     <NativeBaseProvider>
       <View style={fondo}>
-        {
-          data.length > 0
-            ? data.map((element, index) => (
-                <View style={cardd}>
-                  <Box>
-                    <Stack p="4" space={3}>
-                      <Heading size="md" ml="-1">
-                        SUSSY BAKA
-                      </Heading>
-                      <Text fontSize="xs" _light={{
-                        color: "violet.500"
-                      }} _dark={{
-                        color: "violet.400"
-                      }} fontWeight="500" ml="-0.5" mt="-1">
-                        The Silicon Valley of India.
-                      </Text>
-                    </Stack>
-                  </Box>
-                </View>
-              ))
-            : <Text style={mensaje}>No hay anuncios que mostrar</Text>
-        }
-
+        {data?.length > 0 ? (
+          data.map((element, index) => (
+            <Box style={cardd} key={index}>
+              <Stack p="4">
+                <Text>
+                  {element.anuncio.anuncio}
+                </Text>
+                <Text>
+                  <Text>Tipo: {element.anuncio.tipo_anuncio}</Text>
+                </Text>
+                <Text>
+                  <Text>{element.anuncio.fecha_anuncio}</Text>
+                </Text>
+              </Stack>
+            </Box>
+          ))
+        ) : (
+          <Text style={mensaje}>No hay anuncios que mostrar</Text>
+        )}
       </View>
     </NativeBaseProvider>
-  )
+  );
 }

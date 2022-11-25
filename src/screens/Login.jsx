@@ -3,10 +3,11 @@ import { Text, View, TextInput, TouchableOpacity } from "react-native"
 import { NativeBaseProvider } from "native-base"
 import { useState, useEffect } from "react"
 import useSession from "../hooks/useSession"
+import SERVER from "../Services"
 
 export function Login({ navigation }) {
-  const [ form, setForm ] = useState({});
-  const [ message, setMessage ] = useState({})
+  const [form, setForm] = useState({});
+  const [message, setMessage] = useState(null)
 
   const { login } = useSession();
 
@@ -17,7 +18,7 @@ export function Login({ navigation }) {
         clave: form.password,
       };
 
-      const url = "http://192.168.0.108:4000/login";
+      const url = `${SERVER}/login`;
       const content = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,37 +28,16 @@ export function Login({ navigation }) {
       const json = await response.json();
 
       if (response.ok) {
-        login(json.token)
-        navigation.navigate('TabMenu')
+        login(json.token);
+        setMessage(null)
+        navigation.navigate("TabMenu");
       } else {
-        setMessage({...message, login: json.message})
+        setMessage(`${json.message}`);
       }
     } catch (error) {
       console.log("ERROR: ", error);
     }
-  };
-
-  const validacion = () => {
-    if(form.correo === undefined || form.correo === '') {
-      setMessage({...message, correo: 'Required'})
-      return false
-    }
-    
-    if(form.password === undefined || form.password === '') {
-      setMessage({...message, password: 'Required'})
-      return false
-    }
-    return true
   }
-
-  const onSubmit = () => {
-    validacion() && handleSubmitForm()
-  }
-
-  useEffect(() => {
-    console.log(message)
-  }, [message]);
-
   return (
     <NativeBaseProvider>
       <View style={container}>
@@ -76,11 +56,6 @@ export function Login({ navigation }) {
             />
           </View>
 
-          {
-            message.correo !== undefined &&
-            <Text>{message.correo}</Text>
-          }
-
           <View style={input}>
             <TextInput
               name="password"
@@ -93,19 +68,11 @@ export function Login({ navigation }) {
             />
           </View>
 
-          {
-            message.clave !== undefined &&
-            <Text>{message.clave}</Text>
-          }
-
-          <TouchableOpacity onPress={onSubmit}>
+          <TouchableOpacity onPress={handleSubmitForm}>
             <Text style={button}>Iniciar sesión</Text>
           </TouchableOpacity>
 
-          {
-            message.login !== undefined &&
-            <Text style={alertaF}>{message.login}</Text>
-          }
+          {message !== null && <Text style={alertaF}>{message}</Text>}
         </View>
       </View>
     </NativeBaseProvider>
